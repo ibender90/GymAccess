@@ -12,7 +12,7 @@ public class GymAccess {
 	public static void main(String[] args) {
 		SpringApplication.run(GymAccess.class, args);
 	}
-
+	//test merge
 	//@Bean
 	public CommandLineRunner commandLineRunner(
 			AuthenticationService service
