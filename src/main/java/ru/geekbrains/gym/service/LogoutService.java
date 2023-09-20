@@ -1,6 +1,6 @@
-package ru.geekbrains.gym.auth;
+package ru.geekbrains.gym.service;
 
-import ru.geekbrains.gym.token.TokenRepository;
+import ru.geekbrains.gym.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-table-gym-user" author="stalev">
+        <createTable tableName="gym_user">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(64)"></column>
+            <column name="last_name" type="varchar(64)"></column>
+            <column name="email" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-role" author="stalev">
+        <createTable tableName="role">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-token" author="stalev">
+        <createTable tableName="token">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="token" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revoked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expired" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="users_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="user_id" references="gym_user(id)"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints foreignKeyName="role_id" references="role(id)"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-coach" author="stalev">
+        <createTable tableName="coach">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(64)"></column>
+            <column name="last_name" type="varchar(64)"></column>
+            <column name="email" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-workout" author="stalev">
+        <createTable tableName="workout">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(64)"></column>
+            <column name="description" type="varchar(256)"></column>
+            <column name="date" type="datetime"></column>
+            <column name="free_space" type="integer"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-coach_profile" author="stalev">
+        <createTable tableName="coach_profile">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="personal_info" type="varchar(512)"></column>
+            <column name="link_to_photo" type="varchar(256)"></column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

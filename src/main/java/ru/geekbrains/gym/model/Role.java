@@ -1,29 +1,26 @@
-package ru.geekbrains.gym.role;
+package ru.geekbrains.gym.model;
 
-import ru.geekbrains.gym.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.geekbrains.gym.enums.RoleName;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_role")
-public class UserRole {
+@Table(name = "role")
+public class Role {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "role_name")
     @Enumerated(EnumType.STRING)
-    private RoleType roleName;
+    private RoleName roleName;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

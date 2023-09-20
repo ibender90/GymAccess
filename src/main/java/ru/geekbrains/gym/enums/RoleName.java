@@ -1,4 +1,4 @@
-package ru.geekbrains.gym.role;
+package ru.geekbrains.gym.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ru.geekbrains.gym.role.PermissionType.ADMIN_CREATE;
-import static ru.geekbrains.gym.role.PermissionType.ADMIN_DELETE;
-import static ru.geekbrains.gym.role.PermissionType.ADMIN_READ;
-import static ru.geekbrains.gym.role.PermissionType.ADMIN_UPDATE;
-import static ru.geekbrains.gym.role.PermissionType.MANAGER_CREATE;
-import static ru.geekbrains.gym.role.PermissionType.MANAGER_DELETE;
-import static ru.geekbrains.gym.role.PermissionType.MANAGER_READ;
-import static ru.geekbrains.gym.role.PermissionType.MANAGER_UPDATE;
+import static ru.geekbrains.gym.enums.PermissionType.ADMIN_CREATE;
+import static ru.geekbrains.gym.enums.PermissionType.ADMIN_DELETE;
+import static ru.geekbrains.gym.enums.PermissionType.ADMIN_READ;
+import static ru.geekbrains.gym.enums.PermissionType.ADMIN_UPDATE;
+import static ru.geekbrains.gym.enums.PermissionType.MANAGER_CREATE;
+import static ru.geekbrains.gym.enums.PermissionType.MANAGER_DELETE;
+import static ru.geekbrains.gym.enums.PermissionType.MANAGER_READ;
+import static ru.geekbrains.gym.enums.PermissionType.MANAGER_UPDATE;
 
 @RequiredArgsConstructor
-public enum RoleType {
+public enum RoleName {
 
   USER(Collections.emptySet()),
   ADMIN(

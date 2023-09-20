@@ -1,4 +1,4 @@
-package ru.geekbrains.gym.role;
+package ru.geekbrains.gym.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

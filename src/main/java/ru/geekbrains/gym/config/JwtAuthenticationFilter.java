@@ -1,6 +1,6 @@
 package ru.geekbrains.gym.config;
 
-import ru.geekbrains.gym.token.TokenRepository;
+import ru.geekbrains.gym.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.geekbrains.gym.service.JwtService;
 
 @Component
 @RequiredArgsConstructor

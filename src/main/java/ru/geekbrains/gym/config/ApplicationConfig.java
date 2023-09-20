@@ -1,6 +1,6 @@
 package ru.geekbrains.gym.config;
 
-import ru.geekbrains.gym.user.UserRepository;
+import ru.geekbrains.gym.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
