@@ -1,4 +1,4 @@
-package ru.geekbrains.gym.demo;
+package ru.geekbrains.gym.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
-package ru.geekbrains.gym.auth;
+package ru.geekbrains.gym.controller;
 
+import ru.geekbrains.gym.service.AuthenticationService;
 import ru.geekbrains.gym.dto.AuthenticationRequest;
 import ru.geekbrains.gym.dto.AuthenticationResponse;
 import ru.geekbrains.gym.dto.UserRegisterRequest;

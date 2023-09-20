@@ -1,4 +1,4 @@
-package ru.geekbrains.gym.token;
+package ru.geekbrains.gym.enums;
 
 public enum TokenType {
   BEARER

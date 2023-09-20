@@ -1,8 +1,10 @@
-package ru.geekbrains.gym.user;
+package ru.geekbrains.gym.service;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.geekbrains.gym.model.User;
+import ru.geekbrains.gym.repository.UserRepository;
 
 import java.util.Optional;
 
@@ -12,7 +14,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    private Optional<User> findById(Integer id){
+    private Optional<User> findById(Long id){
         return userRepository.findById(id);
     }
 

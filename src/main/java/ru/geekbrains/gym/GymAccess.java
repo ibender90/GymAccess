@@ -1,11 +1,10 @@
 package ru.geekbrains.gym;
 
-import ru.geekbrains.gym.auth.AuthenticationService;
+import ru.geekbrains.gym.service.AuthenticationService;
 import ru.geekbrains.gym.dto.UserRegisterRequest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class GymAccess {
@@ -14,7 +13,7 @@ public class GymAccess {
 		SpringApplication.run(GymAccess.class, args);
 	}
 
-	@Bean
+	//@Bean
 	public CommandLineRunner commandLineRunner(
 			AuthenticationService service
 	) {

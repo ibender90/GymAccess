@@ -1,15 +1,16 @@
-package ru.geekbrains.gym.auth;
+package ru.geekbrains.gym.service;
 
-import ru.geekbrains.gym.config.JwtService;
+import org.springframework.transaction.annotation.Transactional;
+import ru.geekbrains.gym.service.JwtService;
 import ru.geekbrains.gym.dto.AuthenticationRequest;
 import ru.geekbrains.gym.dto.AuthenticationResponse;
 import ru.geekbrains.gym.dto.UserRegisterRequest;
-import ru.geekbrains.gym.role.RoleType;
-import ru.geekbrains.gym.role.UserRole;
-import ru.geekbrains.gym.role.UserRoleRepository;
-import ru.geekbrains.gym.token.Token;
-import ru.geekbrains.gym.token.TokenRepository;
-import ru.geekbrains.gym.token.TokenType;
+import ru.geekbrains.gym.enums.RoleName;
+import ru.geekbrains.gym.model.Role;
+import ru.geekbrains.gym.repository.UserRoleRepository;
+import ru.geekbrains.gym.model.Token;
+import ru.geekbrains.gym.repository.TokenRepository;
+import ru.geekbrains.gym.enums.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,11 +20,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.geekbrains.gym.user.User;
-import ru.geekbrains.gym.user.UserRepository;
+import ru.geekbrains.gym.model.User;
+import ru.geekbrains.gym.repository.UserRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,26 +39,20 @@ public class AuthenticationService {
 
     private final UserRoleRepository userRoleRepository;
 
+    @Transactional
     public AuthenticationResponse register(UserRegisterRequest request) {
 
-        //RoleType roleToSet = request.getRole() == null ? RoleType.USER : request.getRole();
-
-        UserRole roleToSave = UserRole.builder()
-                .roleName(RoleType.USER)
-                .build();
+        Optional<Role> roleToSave = userRoleRepository.findByRoleName(RoleName.USER);
 
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(new ArrayList<>(Set.of(roleToSave)))
+                .roles(new HashSet<Role>(Set.of(roleToSave.get())))
                 .build();
 
         var savedUser = repository.save(user);
-
-        roleToSave.setUser(user);
-        userRoleRepository.save(roleToSave);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

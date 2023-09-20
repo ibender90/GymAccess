@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add-column-user-to-token" author="Stalev">
+     <addColumn tableName="token">
+         <column name="user_id" type="BIGINT">
+         <constraints foreignKeyName="user_id" references="gym_user(id)" deleteCascade="true"/>
+         </column>
+     </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-workouts_to_coach" author="Stalev">
+        <addColumn tableName="coach">
+            <column name="workouts" type="BIGINT">
+                <constraints foreignKeyName="workout_id" references="workout(id)" deleteCascade="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-coach_profile_to_coach" author="Stalev">
+        <addColumn tableName="coach">
+            <column name="coach_profile_id" type="BIGINT">
+                <constraints foreignKeyName="coach_profile_id" references="coach_profile(id)" deleteCascade="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
