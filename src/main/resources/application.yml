@@ -18,6 +18,10 @@ spring:
       ddl-auto: none
     show-sql: false
     properties:
+      javax:
+        persistence:
+          validation:
+            mode=none:
       hibernate:
         format_sql: true
     database: postgresql

@@ -51,7 +51,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(new HashSet<Role>(Set.of(roleToSave.get())))
                 .build();
-
+        System.out.println(user.toString());
         var savedUser = repository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
