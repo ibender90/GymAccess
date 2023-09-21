@@ -1,5 +1,6 @@
 package ru.geekbrains.gym.controller;
 
+import jakarta.validation.Valid;
 import ru.geekbrains.gym.dto.AuthenticationRequest;
 import ru.geekbrains.gym.dto.AuthenticationResponse;
 import ru.geekbrains.gym.dto.UserRegisterRequest;
@@ -24,7 +25,7 @@ public class AuthenticationController {
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody UserRegisterRequest request
+      @Valid @RequestBody UserRegisterRequest request
   ) {
     return ResponseEntity.ok(service.register(request));
   }
