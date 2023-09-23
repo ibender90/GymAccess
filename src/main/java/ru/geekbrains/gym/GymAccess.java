@@ -1,10 +1,22 @@
 package ru.geekbrains.gym;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.geekbrains.gym.enums.RoleName;
+import ru.geekbrains.gym.model.Role;
+import ru.geekbrains.gym.model.User;
+import ru.geekbrains.gym.repository.UserRepository;
+import ru.geekbrains.gym.repository.UserRoleRepository;
 import ru.geekbrains.gym.service.AuthenticationService;
 import ru.geekbrains.gym.dto.UserRegisterRequest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.geekbrains.gym.service.UserService;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @SpringBootApplication
 public class GymAccess {
@@ -12,31 +24,26 @@ public class GymAccess {
 	public static void main(String[] args) {
 		SpringApplication.run(GymAccess.class, args);
 	}
-	//test merge
-	//@Bean
+
+	//@Bean //uncomment to create an admin
 	public CommandLineRunner commandLineRunner(
-			AuthenticationService service
+			AuthenticationService service, UserRepository userRepository,
+			UserRoleRepository roleRepository,
+			BCryptPasswordEncoder encoder
 	) {
 		return args -> {
-			var admin = UserRegisterRequest.builder()
-					.firstname("Admin")
-					.lastname("Admin")
-					.email("admin@mail.com")
-					.password("password")
-					//.role(ADMIN)
+			Optional<Role> roleAdmin = roleRepository.findByRoleName(RoleName.ADMIN);
+			Optional<Role> roleUser = roleRepository.findByRoleName(RoleName.USER);
+
+			User admin = new User().toBuilder()
+					.firstname("admin")
+					.lastname("admin")
+					.email("admin@admin.com")
+					.password(encoder.encode("admin1234"))
+					.roles(new HashSet<>(Set.of(roleAdmin.get(), roleUser.get())))
 					.build();
 
-			System.out.println("Admin token: " + service.register(admin).getAccessToken());
-
-			var manager = UserRegisterRequest.builder()
-					.firstname("Admin")
-					.lastname("Admin")
-					.email("manager@mail.com")
-					.password("password")
-					//.role(MANAGER)
-					.build();
-			System.out.println("Manager token: " + service.register(manager).getAccessToken());
-
+			userRepository.save(admin);
 		};
 	}
 }

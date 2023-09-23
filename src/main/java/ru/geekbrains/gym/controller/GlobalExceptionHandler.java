@@ -16,10 +16,19 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(AppException.class)
+    @ResponseBody
+    public ResponseEntity<ExceptionDto> handleAppExceptions(AppException ex) {
+
+        return wrapIntoResponseEntity(
+                new AppException(ex.getMessage() , HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<ExceptionDto> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ExceptionDto> handleValidationExceptions(MethodArgumentNotValidException ex) {
 
        return wrapIntoResponseEntity(
                new AppException(collectFieldValidationErrors(ex).toString() , HttpStatus.BAD_REQUEST.value()),
