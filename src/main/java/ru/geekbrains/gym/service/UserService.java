@@ -64,7 +64,6 @@ public class UserService {
         Role manager = roleRepository.findByRoleName(RoleName.MANAGER).get();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User with id:" + userId + " not found"));
-
         Set<Role> roles = user.getRoles();
         roles.add(manager);
         return userMapper.toDto(userRepository.save(user));
