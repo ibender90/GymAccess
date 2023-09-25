@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import ru.geekbrains.gym.model.PaidPeriod;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -12,8 +13,9 @@ import lombok.experimental.SuperBuilder;
 public class UserDto {
 
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
+    private PaidPeriodDto paidPeriodDto;
 
 }

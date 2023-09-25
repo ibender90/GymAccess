@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.geekbrains.gym.dto.PaginatedResponseDto;
 import ru.geekbrains.gym.dto.UserDto;
+import ru.geekbrains.gym.dto.UserSearchDto;
 import ru.geekbrains.gym.service.UserService;
 
 //user controller gives access to manager or admin to view userDto, to set paid period for access to gym
@@ -26,6 +28,15 @@ public class UserController {
         return ResponseEntity
                 .ok()
                 .body(userFound);
+    }
+
+    @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
+    @GetMapping(value = "/users", produces = {"application/json"})
+    public ResponseEntity<PaginatedResponseDto> getEmployees(UserSearchDto searchDto) {
+        PaginatedResponseDto paginatedResponse = userService.search(searchDto);
+        return ResponseEntity
+                .ok()
+                .body(paginatedResponse);
     }
 
 }

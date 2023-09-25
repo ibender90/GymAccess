@@ -8,11 +8,9 @@ import ru.geekbrains.gym.model.User;
 import ru.geekbrains.gym.repository.UserRepository;
 import ru.geekbrains.gym.repository.UserRoleRepository;
 import ru.geekbrains.gym.service.AuthenticationService;
-import ru.geekbrains.gym.dto.UserRegisterRequest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.geekbrains.gym.service.UserService;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -36,8 +34,8 @@ public class GymAccess {
 			Optional<Role> roleUser = roleRepository.findByRoleName(RoleName.USER);
 
 			User admin = new User().toBuilder()
-					.firstname("admin")
-					.lastname("admin")
+					.firstName("admin")
+					.lastName("admin")
 					.email("admin@admin.com")
 					.password(encoder.encode("admin1234"))
 					.roles(new HashSet<>(Set.of(roleAdmin.get(), roleUser.get())))
