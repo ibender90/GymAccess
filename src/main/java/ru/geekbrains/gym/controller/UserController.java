@@ -32,7 +32,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
     @GetMapping(value = "/users", produces = {"application/json"})
-    public ResponseEntity<PaginatedResponseDto> getEmployees(UserSearchDto searchDto) {
+    public ResponseEntity<PaginatedResponseDto> getUsers(UserSearchDto searchDto) {
         PaginatedResponseDto paginatedResponse = userService.search(searchDto);
         return ResponseEntity
                 .ok()

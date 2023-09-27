@@ -6,6 +6,6 @@ import ru.geekbrains.gym.dto.RoleDto;
 import ru.geekbrains.gym.model.Role;
 
 @Mapper(componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+        unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface RoleMapper extends EntityMapper<Role, RoleDto>{
 }

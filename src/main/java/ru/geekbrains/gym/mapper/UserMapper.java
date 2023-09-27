@@ -8,8 +8,7 @@ import ru.geekbrains.gym.model.User;
 @Component
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = { PaidPeriodMapper.class,
-            RoleMapper.class }
+        uses = { RoleMapper.class, PaidPeriodMapper.class }
 )
 public interface UserMapper extends EntityMapper<User, UserDto> {
 

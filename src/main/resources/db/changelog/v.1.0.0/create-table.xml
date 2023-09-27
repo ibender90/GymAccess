@@ -50,7 +50,7 @@
 
         <createTable tableName="users_roles">
             <column name="user_id" type="BIGINT">
-                <constraints foreignKeyName="user_id" references="gym_user(id)"/>
+                <constraints foreignKeyName="user_id" references="gym_user(id)" deleteCascade="true"/>
             </column>
             <column name="role_id" type="BIGINT">
                 <constraints foreignKeyName="role_id" references="role(id)"/>

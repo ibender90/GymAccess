@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import ru.geekbrains.gym.model.PaidPeriod;
 
 import java.util.Set;
 
@@ -18,7 +17,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private PaidPeriodDto paidPeriodDto;
+    private PaidPeriodDto paidPeriod;
     private Set<RoleDto> roles;
 
 }

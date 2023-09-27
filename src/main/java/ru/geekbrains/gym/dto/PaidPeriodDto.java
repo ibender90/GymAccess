@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaidPeriodDto {
 
-    private Date dateFrom;
-    private Date dateTo;
+    private Long id;
+    private String dateFrom;
+    private String dateTo;
 }
