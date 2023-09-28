@@ -12,7 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import ru.geekbrains.gym.constant.Constant;
 import ru.geekbrains.gym.dto.PaidPeriodDto;
 import ru.geekbrains.gym.dto.RoleDto;
-import ru.geekbrains.gym.dto.UserDto;
+import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.mocks.PaidPeriodMock;
 import ru.geekbrains.gym.mocks.RoleUserMock;
 import ru.geekbrains.gym.mocks.TokenMock;
@@ -58,7 +58,7 @@ public class UserMapperTest {
     private PaidPeriod paidPeriod = PaidPeriodMock.getMockPaidPeriod(2L);
     private User user = UserMock.getUserMock(1L, paidPeriod, role, token);
 
-    private UserDto dto = null;
+    private UserFullDto dto = null;
 
     public UserMapperTest() throws ParseException {
     }

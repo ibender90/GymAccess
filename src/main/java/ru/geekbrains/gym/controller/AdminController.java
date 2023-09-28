@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.geekbrains.gym.dto.UserDto;
+import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.service.UserService;
 
 @RestController
@@ -17,9 +17,9 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('admin:update')")
     @GetMapping(value = "/set_manager/{id}", produces = {"application/json"})
-    public ResponseEntity<UserDto> setRoleManager(@PathVariable(value = "id") final Long id) {
+    public ResponseEntity<UserFullDto> setRoleManager(@PathVariable(value = "id") final Long id) {
 
-        UserDto managerAssigned = userService.setRoleManager(id);
+        UserFullDto managerAssigned = userService.setRoleManager(id);
         return ResponseEntity
                 .ok()
                 .body(managerAssigned);

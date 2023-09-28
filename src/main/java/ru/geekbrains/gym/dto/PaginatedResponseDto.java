@@ -17,6 +17,6 @@ public class PaginatedResponseDto{
     private int size;
     private String sortingFields;
     private String sortDirection;
-    private List<UserDto> data;
+    private List<UserFullDto> data;
 
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserFullDto {
 
     private Long id;
     private String firstName;

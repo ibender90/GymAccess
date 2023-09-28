@@ -3,12 +3,9 @@ package ru.geekbrains.gym.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.gym.dto.PaginatedResponseDto;
-import ru.geekbrains.gym.dto.UserDto;
+import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.dto.UserSearchDto;
 import ru.geekbrains.gym.service.UserService;
 
@@ -22,9 +19,9 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<UserDto> getUserById(@PathVariable(value = "id") final Long id) {
+    public ResponseEntity<UserFullDto> getUserById(@PathVariable(value = "id") final Long id) {
         //log.debug("REST request to get User : {}", id);
-        UserDto userFound = userService.findById(id);
+        UserFullDto userFound = userService.findById(id);
         return ResponseEntity
                 .ok()
                 .body(userFound);
@@ -39,4 +36,20 @@ public class UserController {
                 .body(paginatedResponse);
     }
 
+//    @PatchMapping(value = "/employees", produces = {"application/json"}, consumes = {"application/json"})
+//    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable(value = "id") @RequestBody EmployeeDto employeeDto) {
+//        EmployeeDto employeeFound = employeeService.partialUpdate(employeeDto);
+//        return ResponseEntity
+//                .ok()
+//                .body(employeeFound);
+//    }
+
+    @PreAuthorize("hasAuthority('admin:update') or hasAuthority('manager:update')")
+    @PatchMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
+    public ResponseEntity<UserFullDto> updatePayment(@RequestBody UserFullDto userFullDto){
+        UserFullDto updatedUser = userService.editPaidPeriod(userFullDto);
+        return ResponseEntity
+                .ok()
+                .body(updatedUser);
+    }
 }
