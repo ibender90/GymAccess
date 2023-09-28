@@ -32,14 +32,18 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(name = "first_name")
-  private String firstname;
+  private String firstName;
 
   @Column(name = "last_name")
-  private String lastname;
+  private String lastName;
   @Column
   private String email;
   @Column
   private String password;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "paid_period_id", referencedColumnName = "id")
+  private PaidPeriod paidPeriod;
 
   @ManyToMany
   @Fetch(FetchMode.JOIN)

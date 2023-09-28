@@ -27,4 +27,13 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-paid_period_to_gym_user" author="Stalev">
+        <addColumn tableName="gym_user">
+            <column name="paid_period_id" type="BIGINT">
+                <constraints foreignKeyName="paid_period_id" references="paid_period(id)" deleteCascade="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

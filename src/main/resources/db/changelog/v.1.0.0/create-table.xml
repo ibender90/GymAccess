@@ -50,7 +50,7 @@
 
         <createTable tableName="users_roles">
             <column name="user_id" type="BIGINT">
-                <constraints foreignKeyName="user_id" references="gym_user(id)"/>
+                <constraints foreignKeyName="user_id" references="gym_user(id)" deleteCascade="true"/>
             </column>
             <column name="role_id" type="BIGINT">
                 <constraints foreignKeyName="role_id" references="role(id)"/>
@@ -96,5 +96,16 @@
             <column name="link_to_photo" type="varchar(256)"></column>
         </createTable>
     </changeSet>
+
+    <changeSet id="create-table-paid_period" author="stalev">
+        <createTable tableName="paid_period">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="date_from" type="datetime"></column>
+            <column name="date_to" type="datetime"></column>
+        </createTable>
+    </changeSet>
+
 
 </databaseChangeLog>

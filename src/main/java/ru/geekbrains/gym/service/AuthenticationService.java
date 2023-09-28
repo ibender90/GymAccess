@@ -45,13 +45,13 @@ public class AuthenticationService {
         Optional<Role> roleToSave = userRoleRepository.findByRoleName(RoleName.USER);
 
         var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
+                .firstName(request.getFirstname())
+                .lastName(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(new HashSet<Role>(Set.of(roleToSave.get())))
                 .build();
-        System.out.println(user.toString());
+
         var savedUser = repository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
