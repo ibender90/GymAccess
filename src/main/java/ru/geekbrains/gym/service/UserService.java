@@ -6,10 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.gym.constant.Constant;
-import ru.geekbrains.gym.dto.PaginatedResponseDto;
-import ru.geekbrains.gym.dto.PaidPeriodDto;
-import ru.geekbrains.gym.dto.UserFullDto;
-import ru.geekbrains.gym.dto.UserSearchDto;
+import ru.geekbrains.gym.dto.*;
 import ru.geekbrains.gym.enums.RoleName;
 import ru.geekbrains.gym.exceptions.AppException;
 import ru.geekbrains.gym.exceptions.IncorrectPaidPeriodException;
@@ -49,13 +46,13 @@ public class UserService {
     }
 
     @Transactional
-    public UserFullDto editPaidPeriod(UserFullDto userFullDto) {
+    public UserWithPaidPeriodDto editPaidPeriod(UserWithPaidPeriodDto userWithPaidPeriodDto) {
 
-        if(userFullDto.getPaidPeriod() != null && correctPaidPeriod(userFullDto.getPaidPeriod())){
-            User user = findByID(userFullDto.getId());
-            PaidPeriod paidPeriod = paidPeriodMapper.toEntity(userFullDto.getPaidPeriod());
+        if(userWithPaidPeriodDto.getPaidPeriodDto() != null && correctPaidPeriod(userWithPaidPeriodDto.getPaidPeriodDto())){
+            User user = findByID(userWithPaidPeriodDto.getId());
+            PaidPeriod paidPeriod = paidPeriodMapper.toEntity(userWithPaidPeriodDto.getPaidPeriodDto());
             user.setPaidPeriod(paidPeriod);
-            return userMapper.toDto(userRepository.save(user));
+            return userMapper.toDtoWithPaidPeriod(userRepository.save(user));
         }
         throw new AppException(new IncorrectPaidPeriodException());
     }
@@ -80,19 +77,37 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public PaginatedResponseDto search(UserSearchDto searchDto) {
+    public PaginatedResponseDto<UserWithPaidPeriodDto> searchForUserAndPaidPeriod(UserSearchDto searchDto) {
 
         Page<User> usersPage = userRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());
-        List<UserFullDto> userFullDtos = userMapper.toDtos(usersPage.getContent());
+        List<UserWithPaidPeriodDto> userWithPaidPeriodDtos = userMapper.toDtosWithPaidPeriod(usersPage.getContent());
 
-        return PaginatedResponseDto.builder()
+        return PaginatedResponseDto.<UserWithPaidPeriodDto>builder()
                 .page(searchDto.getPage())
-                .size(userFullDtos.size())
+                .size(userWithPaidPeriodDtos.size())
                 .sortingFields(searchDto.getSort())
                 .sortDirection(searchDto.getDir().name())
-                .data(userFullDtos)
+                .data(userWithPaidPeriodDtos)
                 .build();
     }
+    //todo generic
+    //userFullDto & userWithPaidPeriodDto extend UserMinimalDto
+    public PaginatedResponseDto<UserFullDto> searchFullUserInfo(UserSearchDto searchDto) {
+
+        Page<User> usersPage = userRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());
+        List<UserFullDto> users = userMapper.toDtos(usersPage.getContent());
+
+        return PaginatedResponseDto.<UserFullDto>builder()
+                .page(searchDto.getPage())
+                .size(users.size())
+                .sortingFields(searchDto.getSort())
+                .sortDirection(searchDto.getDir().name())
+                .data(users)
+                .build();
+    }
+
+
+
 
     @Transactional
     public UserFullDto setRoleManager(Long userId) {

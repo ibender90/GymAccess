@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.gym.dto.PaginatedResponseDto;
 import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.dto.UserSearchDto;
+import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
 import ru.geekbrains.gym.service.UserService;
 
 //user controller gives access to manager or admin to view userDto, to set paid period for access to gym
@@ -28,26 +29,28 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
-    @GetMapping(value = "/users", produces = {"application/json"})
-    public ResponseEntity<PaginatedResponseDto> getUsers(UserSearchDto searchDto) {
-        PaginatedResponseDto paginatedResponse = userService.search(searchDto);
+    @GetMapping(value = "/search", produces = {"application/json"})
+    public ResponseEntity<PaginatedResponseDto<UserWithPaidPeriodDto>> getUsersWithPaidPeriod(UserSearchDto searchDto) {
+        PaginatedResponseDto<UserWithPaidPeriodDto> paginatedResponse = userService.searchForUserAndPaidPeriod(searchDto);
         return ResponseEntity
                 .ok()
                 .body(paginatedResponse);
     }
 
-//    @PatchMapping(value = "/employees", produces = {"application/json"}, consumes = {"application/json"})
-//    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable(value = "id") @RequestBody EmployeeDto employeeDto) {
-//        EmployeeDto employeeFound = employeeService.partialUpdate(employeeDto);
-//        return ResponseEntity
-//                .ok()
-//                .body(employeeFound);
-//    }
+    @PreAuthorize("hasAuthority('admin:read')")
+    @GetMapping(value = "/all", produces = {"application/json"})
+    public ResponseEntity<PaginatedResponseDto<UserFullDto>> getUserFullDtos(UserSearchDto searchDto) {
+        PaginatedResponseDto<UserFullDto> paginatedResponse = userService.searchFullUserInfo(searchDto);
+        return ResponseEntity
+                .ok()
+                .body(paginatedResponse);
+    }
+
 
     @PreAuthorize("hasAuthority('admin:update') or hasAuthority('manager:update')")
     @PatchMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<UserFullDto> updatePayment(@RequestBody UserFullDto userFullDto){
-        UserFullDto updatedUser = userService.editPaidPeriod(userFullDto);
+    public ResponseEntity<UserWithPaidPeriodDto> updatePayment(@RequestBody UserWithPaidPeriodDto userWithPaidPeriodDto){
+        UserWithPaidPeriodDto updatedUser = userService.editPaidPeriod(userWithPaidPeriodDto);
         return ResponseEntity
                 .ok()
                 .body(updatedUser);

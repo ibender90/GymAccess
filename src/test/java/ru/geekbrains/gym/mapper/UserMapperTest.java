@@ -13,6 +13,7 @@ import ru.geekbrains.gym.constant.Constant;
 import ru.geekbrains.gym.dto.PaidPeriodDto;
 import ru.geekbrains.gym.dto.RoleDto;
 import ru.geekbrains.gym.dto.UserFullDto;
+import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
 import ru.geekbrains.gym.mocks.PaidPeriodMock;
 import ru.geekbrains.gym.mocks.RoleUserMock;
 import ru.geekbrains.gym.mocks.TokenMock;
@@ -50,9 +51,6 @@ public class UserMapperTest {
         this.dto = userMapper.toDto(this.user);
     }
 
-
-
-
     private Role role = RoleUserMock.getUserRoleMock();
     private Token token = TokenMock.getTokenMock();
     private PaidPeriod paidPeriod = PaidPeriodMock.getMockPaidPeriod(2L);
@@ -66,7 +64,7 @@ public class UserMapperTest {
 
 
     @Test
-    @DisplayName("User mapped to userDto correctly (Fields except for nested objects)")
+    @DisplayName("User mapped to userFullDto correctly (Fields except for nested objects)")
     public void testUserToDtoMappingWithoutNestedObjects(){
         Assertions.assertEquals(user.getId(), dto.getId());
         Assertions.assertEquals(user.getEmail(), dto.getEmail());
@@ -92,4 +90,18 @@ public class UserMapperTest {
         Assertions.assertEquals(paidPeriodDto.getDateTo(), simpleDateFormat.format(paidPeriod.getDateTo()));
     }
 
+    @Test
+    @DisplayName("User entity  is mapped correctly to UserWithPaidPeriodDto")
+    public void testUserToDtoWithPaidPeriodMapping(){
+        UserWithPaidPeriodDto userWithPaidPeriodDto = userMapper.toDtoWithPaidPeriod(user);
+        PaidPeriodDto paidPeriodDto = userWithPaidPeriodDto.getPaidPeriodDto();
+        PaidPeriod paidPeriod = user.getPaidPeriod();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
+
+        Assertions.assertNotNull(userWithPaidPeriodDto.getPaidPeriodDto());
+        Assertions.assertEquals(paidPeriodDto.getDateFrom(), simpleDateFormat.format(paidPeriod.getDateFrom()));
+        Assertions.assertEquals(paidPeriodDto.getDateTo(), simpleDateFormat.format(paidPeriod.getDateTo()));
+
+    }
 }
