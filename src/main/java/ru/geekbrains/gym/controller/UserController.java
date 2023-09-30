@@ -18,41 +18,7 @@ import ru.geekbrains.gym.service.UserService;
 public class UserController {
     private final UserService userService;
 
-    @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
-    @GetMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<UserFullDto> getUserById(@PathVariable(value = "id") final Long id) {
-        //log.debug("REST request to get User : {}", id);
-        UserFullDto userFound = userService.findById(id);
-        return ResponseEntity
-                .ok()
-                .body(userFound);
-    }
-
-    @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
-    @GetMapping(value = "/search", produces = {"application/json"})
-    public ResponseEntity<PaginatedResponseDto<UserWithPaidPeriodDto>> getUsersWithPaidPeriod(UserSearchDto searchDto) {
-        PaginatedResponseDto<UserWithPaidPeriodDto> paginatedResponse = userService.searchForUserAndPaidPeriod(searchDto);
-        return ResponseEntity
-                .ok()
-                .body(paginatedResponse);
-    }
-
-    @PreAuthorize("hasAuthority('admin:read')")
-    @GetMapping(value = "/all", produces = {"application/json"})
-    public ResponseEntity<PaginatedResponseDto<UserFullDto>> getUserFullDtos(UserSearchDto searchDto) {
-        PaginatedResponseDto<UserFullDto> paginatedResponse = userService.searchFullUserInfo(searchDto);
-        return ResponseEntity
-                .ok()
-                .body(paginatedResponse);
-    }
 
 
-    @PreAuthorize("hasAuthority('admin:update') or hasAuthority('manager:update')")
-    @PatchMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<UserWithPaidPeriodDto> updatePayment(@RequestBody UserWithPaidPeriodDto userWithPaidPeriodDto){
-        UserWithPaidPeriodDto updatedUser = userService.editPaidPeriod(userWithPaidPeriodDto);
-        return ResponseEntity
-                .ok()
-                .body(updatedUser);
-    }
+
 }

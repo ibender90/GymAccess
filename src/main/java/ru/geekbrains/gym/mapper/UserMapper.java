@@ -22,11 +22,16 @@ public interface UserMapper extends EntityMapper<User, UserFullDto> {
     User toEntity(UserFullDto userFullDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "paidPeriod", target = "paidPeriodDto")
+    @Mapping(source = "paidPeriod", target = "paidPeriod")
     UserWithPaidPeriodDto toDtoWithPaidPeriod(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "paidPeriod", target = "paidPeriodDto")
+    @Mapping(source = "paidPeriod", target = "paidPeriod")
     List<UserWithPaidPeriodDto> toDtosWithPaidPeriod(List<User> users);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "paidPeriod", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    void updateUserEntity(UserFullDto dto, @MappingTarget User user);
 
 }
