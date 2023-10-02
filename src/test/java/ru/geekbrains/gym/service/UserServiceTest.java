@@ -12,6 +12,8 @@ import ru.geekbrains.gym.dto.PaidPeriodDto;
 import ru.geekbrains.gym.dto.RoleDto;
 import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
+import ru.geekbrains.gym.exceptions.AppException;
+import ru.geekbrains.gym.exceptions.IncorrectPaidPeriodException;
 import ru.geekbrains.gym.mapper.*;
 import ru.geekbrains.gym.mocks.*;
 import ru.geekbrains.gym.model.PaidPeriod;
@@ -100,7 +102,7 @@ public class UserServiceTest {
         Assertions.assertEquals(savedUser.getRoles(), this.user.getRoles());
     }
     @Test
-    @DisplayName("Paid period is updated correctly")
+    @DisplayName("Success updating correct paid period for user")
     public void updatePaidPeriodTest(){
         //Paid period mock has a correct date
         User testUser = UserMock.getUserMock(1L, paidPeriod, role, token);
@@ -110,15 +112,28 @@ public class UserServiceTest {
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(testUser));
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(testUser);
 
-        UserWithPaidPeriodDto u = userService.editPaidPeriod(userToUpdate);
-        System.out.println(u.getPaidPeriod());
+        userService.editPaidPeriod(userToUpdate);
 
         Mockito.verify(userRepository).save(userArgumentCaptor.capture());
         User savedUser = userArgumentCaptor.getValue();
 
-        System.out.println(savedUser);
         Assertions.assertEquals(paidPeriod.getDateFrom(), savedUser.getPaidPeriod().getDateFrom());
         Assertions.assertEquals(paidPeriod.getDateTo(), savedUser.getPaidPeriod().getDateTo());
     }
+    @Test
+    @DisplayName("Success returning an error if paid period is incorrect (dateFrom is after dateTo) and dateFrom is before current date")
+    public void PaidPeriodTestThrowsException(){
+        UserWithPaidPeriodDto userWithIncorrectPaidPeriod = new UserWithPaidPeriodDto();
+        PaidPeriodDto incorrectPaidPeriod = new PaidPeriodDto(1L, "12-12-2024 00:00:00", "12-12-2023 00:00:00");
+
+        userWithIncorrectPaidPeriod.setId(1L);
+        userWithIncorrectPaidPeriod.setPaidPeriod(incorrectPaidPeriod);
+
+        Assertions.assertThrows(AppException.class, () -> userService.editPaidPeriod(userWithIncorrectPaidPeriod));
+
+        incorrectPaidPeriod.setDateFrom("12-12-1995 00:00:00");
+        Assertions.assertThrows(AppException.class, () -> userService.editPaidPeriod(userWithIncorrectPaidPeriod));
+    }
+
 }
 
