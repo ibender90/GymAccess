@@ -13,8 +13,9 @@ public enum PermissionType {
     MANAGER_READ("manager:read"),
     MANAGER_UPDATE("manager:update"),
     MANAGER_CREATE("manager:create"),
-    MANAGER_DELETE("manager:delete")
+    MANAGER_DELETE("manager:delete"),
 
+    USER_READ("user:read")
     ;
 
     @Getter

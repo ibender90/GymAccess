@@ -1,6 +1,5 @@
 package ru.geekbrains.gym.controller;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import ru.geekbrains.gym.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/admin")
-@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminController {
     private final UserService userService;
@@ -32,7 +30,6 @@ public class AdminController {
                             description = "Unauthorized / Invalid Token",
                             responseCode = "403")
             })
-    @PreAuthorize("hasAuthority('admin:update')")
     @GetMapping(value = "/set_manager/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> setRoleManager(@PathVariable(value = "id") final Long id) {
 
@@ -54,9 +51,9 @@ public class AdminController {
                             description = "Unauthorized / Invalid Token",
                             responseCode = "403")
             })
-    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping(value = "/search", produces = {"application/json"})
-    public ResponseEntity<PaginatedResponseDto<UserFullDto>> getUserFullDtos(@ParameterObject UserSearchDto searchDto) {
+    public ResponseEntity<PaginatedResponseDto<UserFullDto>> getUserFullDtos(
+            @ParameterObject UserSearchDto searchDto) {
         PaginatedResponseDto<UserFullDto> paginatedResponse = userService.searchFullUserInfo(searchDto);
         return ResponseEntity
                 .ok()
@@ -75,7 +72,6 @@ public class AdminController {
                             description = "Unauthorized / Invalid Token",
                             responseCode = "403")
             })
-    @PreAuthorize("hasAuthority('admin:read')")
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> getUserById(@PathVariable(value = "id") final Long id) {
         //log.debug("REST request to get User : {}", id);

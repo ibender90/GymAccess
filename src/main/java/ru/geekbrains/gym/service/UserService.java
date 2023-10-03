@@ -35,6 +35,8 @@ public class UserService {
 
     private final UserRoleRepository roleRepository;
 
+    private final JwtService jwtService;
+
     public UserFullDto findUserFullDto(Long id){
          return userMapper.toDto(findByID(id));
     }
@@ -120,5 +122,10 @@ public class UserService {
 
     private User findByID(Long id){
         return userRepository.findById(id).orElseThrow(() -> new AppException("User with id:" + id + " not found"));
+    }
+
+    public UserWithPaidPeriodDto findUserByEmail(String email){
+        return userMapper.toDtoWithPaidPeriod(userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("User with email: " + email + " not found")));
     }
 }

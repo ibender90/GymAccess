@@ -15,8 +15,7 @@ import ru.geekbrains.gym.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/manager")
-@Tag(name = "Management")
-@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+@Tag(name = "Manager")
 @RequiredArgsConstructor
 public class ManagerController {
     private final UserService userService;
@@ -33,7 +32,6 @@ public class ManagerController {
                             description = "Unauthorized / Invalid Token",
                             responseCode = "403")
             })
-    @PreAuthorize("hasAuthority('admin:read') or hasAuthority('manager:read')")
     @GetMapping(value = "/search", produces = {"application/json"})
     public ResponseEntity<PaginatedResponseDto<UserWithPaidPeriodDto>> getUsersWithPaidPeriod(
             @ParameterObject UserSearchDto searchDto) {
@@ -60,8 +58,7 @@ public class ManagerController {
                             responseCode = "400"
                     )
             })
-    @PreAuthorize("hasAuthority('admin:update') or hasAuthority('manager:update')")
-    @PatchMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
+    @PutMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> updatePayment(
             @ParameterObject UserWithPaidPeriodDto userWithPaidPeriodDto){
         UserWithPaidPeriodDto updatedUser = userService.editPaidPeriod(userWithPaidPeriodDto);
@@ -82,7 +79,6 @@ public class ManagerController {
                 description = "Unauthorized / Invalid Token",
                 responseCode = "403")
             })
-    @PreAuthorize("hasAuthority('manager:read')")
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> getUserById(@PathVariable(value = "id") final Long id) {
         //log.debug("REST request to get User : {}", id);
