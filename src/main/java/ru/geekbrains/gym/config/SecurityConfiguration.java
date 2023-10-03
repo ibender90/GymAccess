@@ -9,9 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import ru.geekbrains.gym.enums.RoleName;
 
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
@@ -83,4 +88,23 @@ public class SecurityConfiguration {
 
     return http.build();
   }
+
+  @Bean
+  public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+    //for testing secured endpoints
+    UserDetails user = User.withUsername("authorisedUser")
+            .password(passwordEncoder.encode("mock3212342343"))
+            .roles(String.valueOf(USER))
+            .build();
+    UserDetails admin = User.withUsername("authorisedAdmin")
+            .password(passwordEncoder.encode("mock32322312"))
+            .roles(String.valueOf(ADMIN))
+            .build();
+    UserDetails manager = User.withUsername("authorizedManager")
+            .password(passwordEncoder.encode("mock5456226224"))
+            .roles(String.valueOf(MANAGER))
+            .build();
+    return new InMemoryUserDetailsManager(user, admin, manager);
+  }
+
 }

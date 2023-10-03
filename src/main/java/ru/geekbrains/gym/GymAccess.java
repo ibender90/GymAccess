@@ -27,7 +27,7 @@ public class GymAccess {
 		SpringApplication.run(GymAccess.class, args);
 	}
 
-	@Bean
+	//@Bean
 	@Transactional
 	public CommandLineRunner commandLineRunner(
 			UserRepository userRepository,
@@ -35,7 +35,7 @@ public class GymAccess {
 			BCryptPasswordEncoder encoder
 	) {
 		return args -> {
-
+			//todo insert admin with liquibase
 			if(userRepository.existsById(1L)){
 				return;
 			}
