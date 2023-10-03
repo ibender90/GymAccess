@@ -18,6 +18,7 @@ import ru.geekbrains.gym.service.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
+@PreAuthorize("hasRole('USER')")
 public class UserController {
     private final UserService userService;
 

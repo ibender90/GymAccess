@@ -3,6 +3,7 @@ package ru.geekbrains.gym.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -87,24 +88,6 @@ public class SecurityConfiguration {
     ;
 
     return http.build();
-  }
-
-  @Bean
-  public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-    //for testing secured endpoints
-    UserDetails user = User.withUsername("authorisedUser")
-            .password(passwordEncoder.encode("mock3212342343"))
-            .roles(String.valueOf(USER))
-            .build();
-    UserDetails admin = User.withUsername("authorisedAdmin")
-            .password(passwordEncoder.encode("mock32322312"))
-            .roles(String.valueOf(ADMIN))
-            .build();
-    UserDetails manager = User.withUsername("authorizedManager")
-            .password(passwordEncoder.encode("mock5456226224"))
-            .roles(String.valueOf(MANAGER))
-            .build();
-    return new InMemoryUserDetailsManager(user, admin, manager);
   }
 
 }
