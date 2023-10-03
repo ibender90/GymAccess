@@ -15,7 +15,7 @@ public class PaidPeriodMock {
 
         return PaidPeriod.builder()
                 .id(id)
-                .dateFrom(format.parse("20-01-1990 01:02:03"))
+                .dateFrom(format.parse("20-01-2024 01:02:03"))
                 .dateTo(format.parse("20-01-2030 01:02:03"))
                 .build();
     }

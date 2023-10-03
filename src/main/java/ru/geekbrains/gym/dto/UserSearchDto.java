@@ -82,12 +82,12 @@ public class UserSearchDto {
         }
 
         if (StringUtils.isNotEmpty(firstName)){
-            Predicate lastNameAsPredicate = criteriaBuilder.equal(root.get("lastName"), lastName);
-            filters.add(lastNameAsPredicate);
+            Predicate firstNameAsPredicate = criteriaBuilder.equal(root.get("firstName"), firstName);
+            filters.add(firstNameAsPredicate);
         }
         if (StringUtils.isNotEmpty(email)){
-            Predicate lastNameAsPredicate = criteriaBuilder.equal(root.get("lastName"), lastName);
-            filters.add(lastNameAsPredicate);
+            Predicate emailAsPredicate = criteriaBuilder.equal(root.get("email"), email);
+            filters.add(emailAsPredicate);
         }
     }
 }

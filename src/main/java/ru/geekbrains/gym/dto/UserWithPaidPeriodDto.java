@@ -10,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserWithPaidPeriodDto extends UserMinimalDto {
-    private PaidPeriodDto paidPeriodDto;
+    private PaidPeriodDto paidPeriod;
 }

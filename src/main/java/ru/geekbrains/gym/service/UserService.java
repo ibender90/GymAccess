@@ -35,22 +35,28 @@ public class UserService {
 
     private final UserRoleRepository roleRepository;
 
-    public UserFullDto findById(Long id){
+    private final JwtService jwtService;
+
+    public UserFullDto findUserFullDto(Long id){
          return userMapper.toDto(findByID(id));
     }
+
+    public UserWithPaidPeriodDto findUserWithPaidPeriod(Long id){
+        return userMapper.toDtoWithPaidPeriod(findByID(id));
+    }
     @Transactional
-    public UserFullDto partialUpdate(UserFullDto userFullDto) { //todo fix
+    public UserFullDto partialUpdate(UserFullDto userFullDto) {
         User user = findByID(userFullDto.getId());
-        userMapper.partialUpdate(user, userFullDto);
+        userMapper.updateUserEntity(userFullDto, user);
         return userMapper.toDto(userRepository.save(user));
     }
 
     @Transactional
     public UserWithPaidPeriodDto editPaidPeriod(UserWithPaidPeriodDto userWithPaidPeriodDto) {
 
-        if(userWithPaidPeriodDto.getPaidPeriodDto() != null && correctPaidPeriod(userWithPaidPeriodDto.getPaidPeriodDto())){
+        if(userWithPaidPeriodDto.getPaidPeriod() != null && correctPaidPeriod(userWithPaidPeriodDto.getPaidPeriod())){
             User user = findByID(userWithPaidPeriodDto.getId());
-            PaidPeriod paidPeriod = paidPeriodMapper.toEntity(userWithPaidPeriodDto.getPaidPeriodDto());
+            PaidPeriod paidPeriod = paidPeriodMapper.toEntity(userWithPaidPeriodDto.getPaidPeriod());
             user.setPaidPeriod(paidPeriod);
             return userMapper.toDtoWithPaidPeriod(userRepository.save(user));
         }
@@ -90,8 +96,6 @@ public class UserService {
                 .data(userWithPaidPeriodDtos)
                 .build();
     }
-    //todo generic
-    //userFullDto & userWithPaidPeriodDto extend UserMinimalDto
     public PaginatedResponseDto<UserFullDto> searchFullUserInfo(UserSearchDto searchDto) {
 
         Page<User> usersPage = userRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());
@@ -106,12 +110,10 @@ public class UserService {
                 .build();
     }
 
-
-
-
     @Transactional
     public UserFullDto setRoleManager(Long userId) {
-        Role manager = roleRepository.findByRoleName(RoleName.MANAGER).get();
+        Role manager = roleRepository.findByRoleName(RoleName.MANAGER)
+                .orElseThrow(() -> new AppException("CRITICAL ERROR, role MANAGER not found in the database"));
         User user = findByID(userId);
         Set<Role> roles = user.getRoles();
         roles.add(manager);
@@ -120,5 +122,10 @@ public class UserService {
 
     private User findByID(Long id){
         return userRepository.findById(id).orElseThrow(() -> new AppException("User with id:" + id + " not found"));
+    }
+
+    public UserWithPaidPeriodDto findUserByEmail(String email){
+        return userMapper.toDtoWithPaidPeriod(userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("User with email: " + email + " not found")));
     }
 }

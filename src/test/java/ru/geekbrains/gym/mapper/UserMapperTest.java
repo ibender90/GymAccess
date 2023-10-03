@@ -14,10 +14,7 @@ import ru.geekbrains.gym.dto.PaidPeriodDto;
 import ru.geekbrains.gym.dto.RoleDto;
 import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
-import ru.geekbrains.gym.mocks.PaidPeriodMock;
-import ru.geekbrains.gym.mocks.RoleUserMock;
-import ru.geekbrains.gym.mocks.TokenMock;
-import ru.geekbrains.gym.mocks.UserMock;
+import ru.geekbrains.gym.mocks.*;
 import ru.geekbrains.gym.model.PaidPeriod;
 import ru.geekbrains.gym.model.Role;
 import ru.geekbrains.gym.model.Token;
@@ -89,17 +86,30 @@ public class UserMapperTest {
         Assertions.assertEquals(paidPeriodDto.getDateFrom(), simpleDateFormat.format(paidPeriod.getDateFrom()));
         Assertions.assertEquals(paidPeriodDto.getDateTo(), simpleDateFormat.format(paidPeriod.getDateTo()));
     }
+    @Test
+    @DisplayName("Users PaidPeriod dto is mapped correctly to entity")
+    public void testUserPaidPeriodMappingToEntity(){
+        UserFullDto userFullDto =  userMapper.toDto(this.user);
+        PaidPeriodDto paidPeriodDto = userFullDto.getPaidPeriod();
+
+        PaidPeriod paidPeriod = user.getPaidPeriod();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
+
+        Assertions.assertEquals(paidPeriodDto.getDateFrom(), simpleDateFormat.format(paidPeriod.getDateFrom()));
+        Assertions.assertEquals(paidPeriodDto.getDateTo(), simpleDateFormat.format(paidPeriod.getDateTo()));
+    }
 
     @Test
     @DisplayName("User entity  is mapped correctly to UserWithPaidPeriodDto")
     public void testUserToDtoWithPaidPeriodMapping(){
         UserWithPaidPeriodDto userWithPaidPeriodDto = userMapper.toDtoWithPaidPeriod(user);
-        PaidPeriodDto paidPeriodDto = userWithPaidPeriodDto.getPaidPeriodDto();
+        PaidPeriodDto paidPeriodDto = userWithPaidPeriodDto.getPaidPeriod();
         PaidPeriod paidPeriod = user.getPaidPeriod();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
 
-        Assertions.assertNotNull(userWithPaidPeriodDto.getPaidPeriodDto());
+        Assertions.assertNotNull(userWithPaidPeriodDto.getPaidPeriod());
         Assertions.assertEquals(paidPeriodDto.getDateFrom(), simpleDateFormat.format(paidPeriod.getDateFrom()));
         Assertions.assertEquals(paidPeriodDto.getDateTo(), simpleDateFormat.format(paidPeriod.getDateTo()));
 

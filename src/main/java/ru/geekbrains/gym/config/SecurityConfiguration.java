@@ -13,20 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_CREATE;
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_DELETE;
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_READ;
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_UPDATE;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_CREATE;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_DELETE;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_READ;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_UPDATE;
-import static ru.geekbrains.gym.enums.RoleName.ADMIN;
-import static ru.geekbrains.gym.enums.RoleName.MANAGER;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
+import static ru.geekbrains.gym.enums.PermissionType.*;
+import static ru.geekbrains.gym.enums.RoleName.*;
 
 @Configuration
 @EnableWebSecurity
@@ -59,23 +51,21 @@ public class SecurityConfiguration {
         )
           .permitAll()
 
-
-        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
-
-
-        .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-        .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-        .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+        .requestMatchers("/api/v1/manager/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+        .requestMatchers(GET, "/api/v1/manager/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+        .requestMatchers(POST, "/api/v1/manager/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+        .requestMatchers(PUT, "/api/v1/manager/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+        .requestMatchers(DELETE, "/api/v1/manager/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
 
 
-       /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-
+        .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
         .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
         .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
         .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
+        .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
 
+            .requestMatchers("/api/v1/user/**").hasAnyRole(USER.name())
+            .requestMatchers(GET, "/api/v1/user/**").hasAnyRole(USER_READ.name())
 
         .anyRequest()
           .authenticated()
