@@ -1,6 +1,9 @@
 package ru.geekbrains.gym.service;
 
+import org.springframework.http.HttpStatusCode;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
+import ru.geekbrains.gym.exceptions.AppException;
 import ru.geekbrains.gym.service.JwtService;
 import ru.geekbrains.gym.dto.AuthenticationRequest;
 import ru.geekbrains.gym.dto.AuthenticationResponse;
@@ -63,7 +66,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws BadCredentialsException{
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

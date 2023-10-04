@@ -14,6 +14,7 @@ import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
 import ru.geekbrains.gym.service.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/manager")
 @Tag(name = "Manager")
 @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")

@@ -6,24 +6,18 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.geekbrains.gym.dto.PaginatedResponseDto;
-import ru.geekbrains.gym.dto.UserSearchDto;
-import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
+import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.mocks.PaidPeriodDtoMock;
-import ru.geekbrains.gym.mocks.UserWithPaidPeriodDtoMock;
-import ru.geekbrains.gym.repository.TokenRepository;
-import ru.geekbrains.gym.service.JwtService;
+import ru.geekbrains.gym.mocks.RoleDtoMock;
+import ru.geekbrains.gym.mocks.UserFullDtoMock;
 import ru.geekbrains.gym.service.UserService;
 
-import java.util.ArrayList;
-import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,7 +34,7 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
-    private UserWithPaidPeriodDto correctResponse =  UserWithPaidPeriodDtoMock.getMock(1L, PaidPeriodDtoMock.getPaidPeriodDtoMock());
+    private final UserFullDto correctResponse =  UserFullDtoMock.getMock(1L, PaidPeriodDtoMock.getPaidPeriodDtoMock(), RoleDtoMock.getRoleDtoUSER());
 
 
     @WithMockUser

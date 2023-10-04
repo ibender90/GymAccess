@@ -13,6 +13,7 @@ import ru.geekbrains.gym.dto.UserSearchDto;
 import ru.geekbrains.gym.service.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor

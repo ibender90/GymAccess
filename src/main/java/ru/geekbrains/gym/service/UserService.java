@@ -124,8 +124,8 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new AppException("User with id:" + id + " not found"));
     }
 
-    public UserWithPaidPeriodDto findUserByEmail(String email){
-        return userMapper.toDtoWithPaidPeriod(userRepository.findByEmail(email)
+    public UserFullDto findUserByEmail(String email){
+        return userMapper.toDto(userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException("User with email: " + email + " not found")));
     }
 }
