@@ -35,7 +35,7 @@ public class AdminController {
     @GetMapping(value = "/set_manager/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> setRoleManager(@PathVariable(value = "id") final Long id) {
 
-        UserFullDto managerAssigned = userService.setRoleManager(id);
+        UserFullDto managerAssigned = userService.addRoleManager(id);
         return ResponseEntity
                 .ok()
                 .body(managerAssigned);

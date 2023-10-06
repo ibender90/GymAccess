@@ -15,6 +15,12 @@ public enum PermissionType {
     MANAGER_CREATE("manager:create"),
     MANAGER_DELETE("manager:delete"),
 
+    COACH_CREATE("coach_create"),
+    COACH_READ("coach_read"),
+    COACH_DELETE("coach_delete"),
+    COACH_UPDATE("coach_update"),
+
+
     USER_READ("user:read")
     ;
 

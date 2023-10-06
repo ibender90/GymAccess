@@ -111,7 +111,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserFullDto setRoleManager(Long userId) {
+    public UserFullDto addRoleManager(Long userId) {
         Role manager = roleRepository.findByRoleName(RoleName.MANAGER)
                 .orElseThrow(() -> new AppException("CRITICAL ERROR, role MANAGER not found in the database"));
         User user = findByID(userId);
@@ -127,5 +127,34 @@ public class UserService {
     public UserFullDto findUserByEmail(String email){
         return userMapper.toDto(userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException("User with email: " + email + " not found")));
+    }
+
+    @Transactional
+    public UserFullDto addRoleCoach(Long userId){
+        Role coach = roleRepository.findByRoleName(RoleName.COACH)
+                .orElseThrow(() -> new AppException("CRITICAL ERROR, role COACH not found in the database"));
+        User user = findByID(userId);
+
+        Set<Role> roles = user.getRoles();
+        if(roles.stream().anyMatch(role ->
+                role.getRoleName().name().equals(RoleName.COACH.name()))){
+            throw new AppException("USER WITH ID "+ userId + " is already a coach", 400);
+        }
+        roles.add(coach);
+        return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Transactional
+    public UserFullDto removeRoleCoach(Long userId){
+        User user = findByID(userId);
+
+        Set<Role> roles = user.getRoles();
+        if(roles.stream().noneMatch(role ->
+                role.getRoleName().name().equals(RoleName.COACH.name()))){
+            throw new AppException("USER WITH ID "+ userId + " is not a coach", 400);
+        }
+        roles.stream().filter(role ->
+            role.getRoleName().name().equals(RoleName.COACH.name())).forEach(roles::remove);
+        return userMapper.toDto(userRepository.save(user));
     }
 }

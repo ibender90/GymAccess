@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.gym.dto.PaginatedResponseDto;
+import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.dto.UserSearchDto;
 import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
 import ru.geekbrains.gym.service.UserService;
@@ -62,7 +63,7 @@ public class ManagerController {
             })
     @PutMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> updatePayment(
-            @ParameterObject UserWithPaidPeriodDto userWithPaidPeriodDto){
+            @ParameterObject UserWithPaidPeriodDto userWithPaidPeriodDto) {
         UserWithPaidPeriodDto updatedUser = userService.editPaidPeriod(userWithPaidPeriodDto);
         return ResponseEntity
                 .ok()
@@ -73,13 +74,13 @@ public class ManagerController {
             description = "Get endpoint for manager with path variable",
             summary = "View user by id to check his personal data and paid period",
             responses = {
-        @ApiResponse(
-                description = "Success",
-                responseCode = "200"
-        ),
-        @ApiResponse(
-                description = "Unauthorized / Invalid Token",
-                responseCode = "403")
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403")
             })
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> getUserById(@PathVariable(value = "id") final Long id) {
@@ -89,4 +90,54 @@ public class ManagerController {
                 .ok()
                 .body(userFound);
     }
+
+    @Operation(
+            description = "Get endpoint for manager to assign a coach",
+            summary = "Selected user with get a role coach",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403"),
+                    @ApiResponse(
+                            description = "User with this id is already a coach",
+                            responseCode = "400"
+                    )
+            })
+    @GetMapping(value = "/assign_coach/{id}", produces = {"application/json"})
+    public ResponseEntity<UserFullDto> assignCoach(@PathVariable(value = "id") final Long id) {
+        UserFullDto newCoach = userService.addRoleCoach(id);
+        return ResponseEntity
+                .ok()
+                .body(newCoach);
+    }
+
+    @Operation(
+            description = "Get endpoint for manager to remove coach role from user",
+            summary = "Selected user with get a role coach",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403"),
+                    @ApiResponse(
+                            description = "User with this id is not a coach",
+                            responseCode = "400"
+                    )
+            })
+    @GetMapping(value = "/remove_role_coach/{id}", produces = {"application/json"})
+    public ResponseEntity<UserFullDto> removeRoleCoach(@PathVariable(value = "id") final Long id) {
+        UserFullDto notAcoachAnymore = userService.removeRoleCoach(id);
+        return ResponseEntity
+                .ok()
+                .body(notAcoachAnymore);
+    }
+
+
 }

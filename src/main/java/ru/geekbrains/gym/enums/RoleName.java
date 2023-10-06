@@ -9,19 +9,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_CREATE;
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_DELETE;
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_READ;
-import static ru.geekbrains.gym.enums.PermissionType.ADMIN_UPDATE;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_CREATE;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_DELETE;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_READ;
-import static ru.geekbrains.gym.enums.PermissionType.MANAGER_UPDATE;
+import static ru.geekbrains.gym.enums.PermissionType.*;
 
 @RequiredArgsConstructor
 public enum RoleName {
 
-  USER(Collections.emptySet()),
+  USER(Set.of(
+          USER_READ
+  )),
   ADMIN(
           Set.of(
                   ADMIN_READ,
@@ -41,6 +36,15 @@ public enum RoleName {
                   MANAGER_DELETE,
                   MANAGER_CREATE
           )
+  ),
+
+  COACH(
+          Set.of(
+                  COACH_READ,
+                  COACH_UPDATE,
+                  COACH_DELETE,
+                  COACH_CREATE
+  )
   )
 
   ;

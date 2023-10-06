@@ -38,3 +38,7 @@ application:
 
 server:
   port: ${SERVER_PORT}
+
+logging:
+  level:
+    ru.geekbrains.gym: debug

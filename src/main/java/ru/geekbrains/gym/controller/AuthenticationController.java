@@ -1,6 +1,8 @@
 package ru.geekbrains.gym.controller;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.gym.dto.AuthenticationRequest;
 import ru.geekbrains.gym.dto.AuthenticationResponse;
@@ -20,6 +22,7 @@ import java.io.IOException;
 public class AuthenticationController {
 
   private final AuthenticationService service;
+  private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
@@ -31,6 +34,7 @@ public class AuthenticationController {
   public ResponseEntity<AuthenticationResponse> authenticate(
       @RequestBody AuthenticationRequest request
   ) {
+    logger.debug("Authentication request: " + request);
     return ResponseEntity.ok(service.authenticate(request));
   }
 
