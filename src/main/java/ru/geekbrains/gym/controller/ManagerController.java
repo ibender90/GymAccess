@@ -8,10 +8,9 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.geekbrains.gym.dto.PaginatedResponseDto;
-import ru.geekbrains.gym.dto.UserFullDto;
-import ru.geekbrains.gym.dto.UserSearchDto;
-import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
+import ru.geekbrains.gym.dto.*;
+import ru.geekbrains.gym.model.CoachProfile;
+import ru.geekbrains.gym.service.CoachService;
 import ru.geekbrains.gym.service.UserService;
 
 @RestController
@@ -22,6 +21,7 @@ import ru.geekbrains.gym.service.UserService;
 @RequiredArgsConstructor
 public class ManagerController {
     private final UserService userService;
+    private final CoachService coachService;
 
     @Operation(
             description = "Get endpoint for manager with parameter object",
@@ -109,10 +109,12 @@ public class ManagerController {
             })
     @GetMapping(value = "/assign_coach/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> assignCoach(@PathVariable(value = "id") final Long id) {
-        UserFullDto newCoach = userService.addRoleCoach(id);
+        UserFullDto userWithRoleCoach = userService.addRoleCoach(id);
+        coachService.linkCoachTableWithUser(id);
+
         return ResponseEntity
                 .ok()
-                .body(newCoach);
+                .body(userWithRoleCoach);
     }
 
     @Operation(
@@ -133,10 +135,21 @@ public class ManagerController {
             })
     @GetMapping(value = "/remove_role_coach/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> removeRoleCoach(@PathVariable(value = "id") final Long id) {
-        UserFullDto notAcoachAnymore = userService.removeRoleCoach(id);
+        UserFullDto notCoach = userService.removeRoleCoach(id);
         return ResponseEntity
                 .ok()
-                .body(notAcoachAnymore);
+                .body(notCoach);
+    }
+
+    @PutMapping(value = "/edit_coach_profile/{coachId}", produces = {"application/json"})
+    public ResponseEntity<CoachProfile>editCoachProfile(
+            @PathVariable(value = "coachId") final Long coachId,
+            @RequestBody @ParameterObject CoachProfileDto profileDto){
+
+        CoachProfile updatedProfile = coachService.editProfile(coachId, profileDto);
+        return ResponseEntity
+                .ok()
+                .body(updatedProfile);
     }
 
 

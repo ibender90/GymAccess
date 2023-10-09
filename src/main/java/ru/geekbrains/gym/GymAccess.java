@@ -27,7 +27,7 @@ public class GymAccess {
 		SpringApplication.run(GymAccess.class, args);
 	}
 
-	//@Bean
+	@Bean
 	@Transactional
 	public CommandLineRunner commandLineRunner(
 			UserRepository userRepository,

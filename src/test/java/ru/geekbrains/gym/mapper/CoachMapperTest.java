@@ -1,5 +1,6 @@
 package ru.geekbrains.gym.mapper;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,17 +11,19 @@ import org.springframework.test.util.ReflectionTestUtils;
 import ru.geekbrains.gym.dto.CoachDto;
 import ru.geekbrains.gym.dto.CoachProfileDto;
 import ru.geekbrains.gym.dto.WorkoutDto;
-import ru.geekbrains.gym.mocks.CoachDtoMock;
-import ru.geekbrains.gym.mocks.CoachProfileDtoMock;
-import ru.geekbrains.gym.mocks.WorkoutDtoMock;
+import ru.geekbrains.gym.mocks.*;
 import ru.geekbrains.gym.model.Coach;
 
+import java.text.ParseException;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class CoachMapperTest {
     @Spy
     private CoachMapper coachMapper = new CoachMapperImpl();
+
+    public CoachMapperTest() throws ParseException {
+    }
 
     @BeforeEach
     public void initMapperDependencies() {

@@ -10,11 +10,14 @@ import ru.geekbrains.gym.dto.*;
 import ru.geekbrains.gym.enums.RoleName;
 import ru.geekbrains.gym.exceptions.AppException;
 import ru.geekbrains.gym.exceptions.IncorrectPaidPeriodException;
+import ru.geekbrains.gym.mapper.CoachMapper;
 import ru.geekbrains.gym.mapper.PaidPeriodMapper;
 import ru.geekbrains.gym.mapper.UserMapper;
+import ru.geekbrains.gym.model.Coach;
 import ru.geekbrains.gym.model.PaidPeriod;
 import ru.geekbrains.gym.model.Role;
 import ru.geekbrains.gym.model.User;
+import ru.geekbrains.gym.repository.CoachRepository;
 import ru.geekbrains.gym.repository.UserRepository;
 import ru.geekbrains.gym.repository.UserRoleRepository;
 
@@ -36,6 +39,8 @@ public class UserService {
     private final UserRoleRepository roleRepository;
 
     private final JwtService jwtService;
+
+    private final CoachService coachService;
 
     public UserFullDto findUserFullDto(Long id){
          return userMapper.toDto(findByID(id));
