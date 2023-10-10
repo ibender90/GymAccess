@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.geekbrains.gym.validator.FutureDate;
 
 import java.util.Date;
 
@@ -21,6 +22,7 @@ public class WorkoutDto {
     @NotBlank(message = "Description can't be empty")
     private String description;
     @NotNull(message = "Please specify the workout date")
+    @FutureDate
     private String date;
     private Long coachId;
     @NotNull(message = "Please specify maximum space")
