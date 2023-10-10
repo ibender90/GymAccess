@@ -28,8 +28,8 @@ public class Workout {
     @Column
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coach_id")
+    @ManyToOne
+    @JoinColumn(name = "coach_id", nullable = false)
     private Coach coach;
 
     @Column

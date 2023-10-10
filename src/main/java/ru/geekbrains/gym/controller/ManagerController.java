@@ -38,6 +38,7 @@ public class ManagerController {
     @GetMapping(value = "/search", produces = {"application/json"})
     public ResponseEntity<PaginatedResponseDto<UserWithPaidPeriodDto>> getUsersWithPaidPeriod(
             @ParameterObject UserSearchDto searchDto) {
+
         PaginatedResponseDto<UserWithPaidPeriodDto> paginatedResponse = userService.searchForUserAndPaidPeriod(searchDto);
         return ResponseEntity
                 .ok()
@@ -63,7 +64,8 @@ public class ManagerController {
             })
     @PutMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> updatePayment(
-            @ParameterObject UserWithPaidPeriodDto userWithPaidPeriodDto) {
+            @ParameterObject @RequestBody UserWithPaidPeriodDto userWithPaidPeriodDto) {
+
         UserWithPaidPeriodDto updatedUser = userService.editPaidPeriod(userWithPaidPeriodDto);
         return ResponseEntity
                 .ok()

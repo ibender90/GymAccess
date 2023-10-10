@@ -2,6 +2,7 @@ package ru.geekbrains.gym.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
@@ -97,7 +98,7 @@ public class AdminController {
             })
     @PutMapping(value = "/update", produces = {"application/json"})
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<UserFullDto> updateUser(@ParameterObject UserFullDto userToUpdate){
+    public ResponseEntity<UserFullDto> updateUser(@ParameterObject @RequestBody UserFullDto userToUpdate){
         UserFullDto updatedUser = userService.partialUpdate(userToUpdate);
         return ResponseEntity
                 .ok()

@@ -12,10 +12,18 @@
      </addColumn>
     </changeSet>
 
-    <changeSet id="add-column-workouts_to_coach" author="Stalev">
-        <addColumn tableName="coach">
-            <column name="workouts" type="BIGINT">
-                <constraints foreignKeyName="workout_id" references="workout(id)" deleteCascade="true"/>
+<!--    <changeSet id="add-column-workouts_to_coach" author="Stalev">-->
+<!--        <addColumn tableName="coach">-->
+<!--            <column name="workout_id" type="BIGINT">-->
+<!--                <constraints foreignKeyName="workout_id" references="workout(id)" deleteCascade="true"/>-->
+<!--            </column>-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
+
+    <changeSet id="add-column-coach_id_to_workout" author="Stalev">
+        <addColumn tableName="workout">
+            <column name="coach_id" type="BIGINT">
+                <constraints foreignKeyName="coach_id" references="coach(id)" deleteCascade="true"/>
             </column>
         </addColumn>
     </changeSet>

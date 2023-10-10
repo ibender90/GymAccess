@@ -2,6 +2,7 @@ package ru.geekbrains.gym.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +38,12 @@ public class WorkoutController {
                             responseCode = "todo")
             })
     @PostMapping(value = "/new", produces = {"application/json"})
-    public ResponseEntity<List<WorkoutDto>> addWorkout(@RequestBody @ParameterObject WorkoutDto workoutDto,
+    public ResponseEntity<WorkoutDto> addWorkout(@RequestBody @ParameterObject @Valid WorkoutDto workoutDto,
             Authentication authentication) {
 
-        List<WorkoutDto> workoutDtoList = workoutService.createWorkout(workoutDto, authentication.getName());
+        WorkoutDto savedWorkout = workoutService.createWorkout(workoutDto, authentication.getName());
         return ResponseEntity
                 .ok()
-                .body(workoutDtoList);
+                .body(savedWorkout);
     }
 }

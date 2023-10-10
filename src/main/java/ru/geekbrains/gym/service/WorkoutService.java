@@ -3,11 +3,11 @@ package ru.geekbrains.gym.service;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.gym.dto.WorkoutDto;
 import ru.geekbrains.gym.exceptions.AppException;
 import ru.geekbrains.gym.mapper.WorkoutMapper;
 import ru.geekbrains.gym.model.Coach;
-import ru.geekbrains.gym.model.User;
 import ru.geekbrains.gym.model.Workout;
 import ru.geekbrains.gym.repository.CoachRepository;
 import ru.geekbrains.gym.repository.WorkoutRepository;
@@ -23,21 +23,17 @@ public class WorkoutService {
     private final WorkoutMapper workoutMapper;
     private final CoachRepository coachRepository;
 
-    public List<WorkoutDto> createWorkout(WorkoutDto workoutDto, String coachEmail){
+    @Transactional
+    public WorkoutDto createWorkout(WorkoutDto workoutDto, String coachEmail){
 
         Coach coach = coachRepository.findByEmail(coachEmail).orElseThrow(()->
                 new AppException("Coach with email " + coachEmail + " not found", 400));
 
         Workout newWorkout = workoutMapper.toEntity(workoutDto);
         newWorkout.setId(null);
+        newWorkout.setCoach(coach);
 
-        List<Workout> workouts = coach.getWorkouts();
-        if(workouts == null){
-            workouts = new LinkedList<>(List.of(newWorkout));
-        } else {
-            coach.getWorkouts().add(newWorkout);
-        }
-        return workoutMapper.toDtos(coachRepository.save(coach).getWorkouts());
+        return workoutMapper.toDto(workoutRepository.save(newWorkout));
     }
 
     public  WorkoutDto editWorkout(){
