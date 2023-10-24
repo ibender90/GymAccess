@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.gym.dto.*;
-import ru.geekbrains.gym.model.CoachProfile;
+import ru.geekbrains.gym.service.CoachProfileService;
 import ru.geekbrains.gym.service.CoachService;
 import ru.geekbrains.gym.service.UserService;
 
@@ -22,6 +22,7 @@ import ru.geekbrains.gym.service.UserService;
 public class ManagerController {
     private final UserService userService;
     private final CoachService coachService;
+    private final CoachProfileService coachProfileService;
 
     @Operation(
             description = "Get endpoint for manager with parameter object",
@@ -112,8 +113,7 @@ public class ManagerController {
     @GetMapping(value = "/assign_coach/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> assignCoach(@PathVariable(value = "id") final Long id) {
         UserFullDto userWithRoleCoach = userService.addRoleCoach(id);
-        coachService.linkCoachTableWithUser(id);
-
+        coachService.createCoach(id);
         return ResponseEntity
                 .ok()
                 .body(userWithRoleCoach);
@@ -143,12 +143,10 @@ public class ManagerController {
                 .body(notCoach);
     }
 
-    @PutMapping(value = "/edit_coach_profile/{coachId}", produces = {"application/json"})
-    public ResponseEntity<CoachProfile>editCoachProfile(
-            @PathVariable(value = "coachId") final Long coachId,
-            @RequestBody @ParameterObject CoachProfileDto profileDto){
+    @PutMapping(value = "/edit_coach_profile", produces = {"application/json"})
+    public ResponseEntity<CoachProfileDto>editCoachProfile(@RequestBody @ParameterObject CoachProfileDto profileDto){
 
-        CoachProfile updatedProfile = coachService.editProfile(coachId, profileDto);
+        CoachProfileDto updatedProfile = coachProfileService.editProfile(profileDto);
         return ResponseEntity
                 .ok()
                 .body(updatedProfile);

@@ -10,10 +10,14 @@ import ru.geekbrains.gym.model.Coach;
 import java.util.Optional;
 
 public interface CoachRepository extends JpaRepository<Coach, Long> {
-    Optional<Coach> findByEmail(String coachEmail);
-
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO coach (id) values (:id)", nativeQuery = true)
     void joinCoachTable(@Param("id") Long id);
+
+    @Query(
+            "SELECT c FROM Coach c where c.id = " +
+                    "(SELECT u.id FROM User u where u.email LIKE :mail)"
+    )
+    Optional<Coach> findByEmail(@Param("mail") String email);
 }

@@ -2,26 +2,31 @@ package ru.geekbrains.gym.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 
 import java.util.List;
 
 @Data
-@SuperBuilder(toBuilder=true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@PrimaryKeyJoinColumn(name = "id")
 @Table(name = "coach")
-public class Coach extends User {
+public class Coach {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "gym_user_id", referencedColumnName = "id")
+    private User user;
 
     @OneToMany(mappedBy = "coach")
     private List<Workout> workouts;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "coach_profile_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "coach")
     private CoachProfile coachProfile;
 }

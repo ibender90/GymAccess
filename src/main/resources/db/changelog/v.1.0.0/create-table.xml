@@ -61,7 +61,7 @@
 
     <changeSet id="create-table-coach" author="stalev">
         <createTable tableName="coach">
-            <column name="id" type="BIGINT" autoIncrement="false">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
         </createTable>

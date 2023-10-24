@@ -26,7 +26,7 @@ public class WorkoutService {
     @Transactional
     public WorkoutDto createWorkout(WorkoutDto workoutDto, String coachEmail){
 
-        Coach coach = coachRepository.findByEmail(coachEmail).orElseThrow(()->
+        Coach coach =  coachRepository.findByEmail(coachEmail).orElseThrow(()->
                 new AppException("Coach with email " + coachEmail + " not found", 400));
 
         Workout newWorkout = workoutMapper.toEntity(workoutDto);
@@ -34,6 +34,12 @@ public class WorkoutService {
         newWorkout.setCoach(coach);
 
         return workoutMapper.toDto(workoutRepository.save(newWorkout));
+    }
+
+    //todo test
+    public List<WorkoutDto> findAll(Long coachId){
+        List<Workout> list = workoutRepository.findAllByCoach(coachId).orElseThrow(() -> new AppException("No workouts found for this coach"));
+        return workoutMapper.toDtos(list);
     }
 
     public  WorkoutDto editWorkout(){

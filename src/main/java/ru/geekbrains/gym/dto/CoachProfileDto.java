@@ -16,4 +16,6 @@ public class CoachProfileDto {
     private String personalInfo;
     @NotBlank(message = "Link to photo can't be empty")
     private String linkToPhoto;
+
+    private Long coachId;
 }

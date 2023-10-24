@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.geekbrains.gym.dto.CoachProfileDto;
-import ru.geekbrains.gym.exceptions.AppException;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.gym.mapper.CoachMapper;
 import ru.geekbrains.gym.model.Coach;
-import ru.geekbrains.gym.model.CoachProfile;
+import ru.geekbrains.gym.model.User;
 import ru.geekbrains.gym.repository.CoachRepository;
 
 @Service
@@ -21,30 +20,17 @@ public class CoachService {
 
     private final CoachMapper coachMapper;
 
-    //coach can create and edit workouts
-    public void linkCoachTableWithUser(Long userId) {
-        coachRepository.joinCoachTable(userId);
+    private final CoachProfileService coachProfileService;
+    private final UserService userService;
+
+    @Transactional
+    public void createCoach(Long userId){
+        User user = userService.findByID(userId);
+        Coach coach = Coach.builder()
+                .user(user)
+                .build();
+        Coach savedCoach = coachRepository.save(coach);
         log.debug("New coach saved successfully");
-    }
-    public CoachProfile editProfile(Long coachId, CoachProfileDto profileDto){
-
-        Coach coach =  coachRepository.findById(coachId).orElseThrow(
-                () -> new AppException("Coach with id " + coachId + " not found")
-        );
-
-        CoachProfile profile = null;
-        if(coach.getCoachProfile() == null){
-            profile = CoachProfile.builder()
-                    .personalInfo(profileDto.getPersonalInfo())
-                    .linkToPhoto(profileDto.getLinkToPhoto())
-                    .build();
-        }
-        else {
-            profile = coach.getCoachProfile();
-            profile.setPersonalInfo(profileDto.getPersonalInfo());
-            profile.setLinkToPhoto(profileDto.getLinkToPhoto());
-        }
-        coach.setCoachProfile(profile);
-        return coachRepository.save(coach).getCoachProfile();
+        coachProfileService.createProfile(savedCoach);
     }
 }

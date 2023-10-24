@@ -10,14 +10,11 @@ import ru.geekbrains.gym.dto.*;
 import ru.geekbrains.gym.enums.RoleName;
 import ru.geekbrains.gym.exceptions.AppException;
 import ru.geekbrains.gym.exceptions.IncorrectPaidPeriodException;
-import ru.geekbrains.gym.mapper.CoachMapper;
 import ru.geekbrains.gym.mapper.PaidPeriodMapper;
 import ru.geekbrains.gym.mapper.UserMapper;
-import ru.geekbrains.gym.model.Coach;
 import ru.geekbrains.gym.model.PaidPeriod;
 import ru.geekbrains.gym.model.Role;
 import ru.geekbrains.gym.model.User;
-import ru.geekbrains.gym.repository.CoachRepository;
 import ru.geekbrains.gym.repository.UserRepository;
 import ru.geekbrains.gym.repository.UserRoleRepository;
 
@@ -39,8 +36,6 @@ public class UserService {
     private final UserRoleRepository roleRepository;
 
     private final JwtService jwtService;
-
-    private final CoachService coachService;
 
     public UserFullDto findUserFullDto(Long id){
          return userMapper.toDto(findByID(id));
@@ -125,7 +120,7 @@ public class UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
-    private User findByID(Long id){
+    public User findByID(Long id){
         return userRepository.findById(id).orElseThrow(() -> new AppException("User with id:" + id + " not found"));
     }
 
@@ -133,6 +128,7 @@ public class UserService {
         return userMapper.toDto(userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException("User with email: " + email + " not found")));
     }
+
 
     @Transactional
     public UserFullDto addRoleCoach(Long userId){
@@ -150,7 +146,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserFullDto removeRoleCoach(Long userId){
+    public UserFullDto removeRoleCoach(Long userId){ //todo fix
         User user = findByID(userId);
 
         Set<Role> roles = user.getRoles();

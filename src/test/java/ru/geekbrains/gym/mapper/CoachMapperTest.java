@@ -16,8 +16,8 @@ import ru.geekbrains.gym.model.Coach;
 
 import java.text.ParseException;
 import java.util.List;
-
-@ExtendWith(MockitoExtension.class)
+//todo check
+//@ExtendWith(MockitoExtension.class)
 public class CoachMapperTest {
     @Spy
     private CoachMapper coachMapper = new CoachMapperImpl();

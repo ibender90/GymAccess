@@ -22,8 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity
 @ToString
-//@MappedSuperclass
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "gym_user")
 public class User implements UserDetails {
 

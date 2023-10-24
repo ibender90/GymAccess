@@ -23,4 +23,8 @@ public class CoachProfile {
 
     @Column(name = "link_to_photo")
     private String linkToPhoto;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "coach_id", referencedColumnName = "id")
+    private Coach coach;
 }
