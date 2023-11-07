@@ -2,6 +2,8 @@ package ru.geekbrains.gym.service;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ import java.util.Set;
 @Data
 @RequiredArgsConstructor
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -79,8 +83,8 @@ public class UserService {
     }
 
     public void deleteById(Long id){
-        //todo logging
         userRepository.deleteById(id);
+        logger.info("User with id " + id + " was deleted from database");
     }
 
     public PaginatedResponseDto<UserWithPaidPeriodDto> searchForUserAndPaidPeriod(UserSearchDto searchDto) {
@@ -129,33 +133,28 @@ public class UserService {
                 .orElseThrow(() -> new AppException("User with email: " + email + " not found")));
     }
 
-
     @Transactional
     public UserFullDto addRoleCoach(Long userId){
         Role coach = roleRepository.findByRoleName(RoleName.COACH)
                 .orElseThrow(() -> new AppException("CRITICAL ERROR, role COACH not found in the database"));
         User user = findByID(userId);
-
         Set<Role> roles = user.getRoles();
-        if(roles.stream().anyMatch(role ->
-                role.getRoleName().name().equals(RoleName.COACH.name()))){
-            throw new AppException("USER WITH ID "+ userId + " is already a coach", 400);
-        }
         roles.add(coach);
         return userMapper.toDto(userRepository.save(user));
     }
 
     @Transactional
-    public UserFullDto removeRoleCoach(Long userId){ //todo fix
+    public UserFullDto removeRoleCoach(Long userId){
         User user = findByID(userId);
-
         Set<Role> roles = user.getRoles();
+
         if(roles.stream().noneMatch(role ->
                 role.getRoleName().name().equals(RoleName.COACH.name()))){
             throw new AppException("USER WITH ID "+ userId + " is not a coach", 400);
         }
-        roles.stream().filter(role ->
-            role.getRoleName().name().equals(RoleName.COACH.name())).forEach(roles::remove);
+        Role coach = roles.stream().filter(role ->
+                role.getRoleName().name().equals(RoleName.COACH.name())).findFirst().get();
+        roles.remove(coach);
         return userMapper.toDto(userRepository.save(user));
     }
 }

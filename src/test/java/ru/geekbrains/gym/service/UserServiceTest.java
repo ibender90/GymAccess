@@ -12,8 +12,8 @@ import ru.geekbrains.gym.dto.PaidPeriodDto;
 import ru.geekbrains.gym.dto.RoleDto;
 import ru.geekbrains.gym.dto.UserFullDto;
 import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
+import ru.geekbrains.gym.enums.RoleName;
 import ru.geekbrains.gym.exceptions.AppException;
-import ru.geekbrains.gym.exceptions.IncorrectPaidPeriodException;
 import ru.geekbrains.gym.mapper.*;
 import ru.geekbrains.gym.mocks.*;
 import ru.geekbrains.gym.model.PaidPeriod;
@@ -21,17 +21,23 @@ import ru.geekbrains.gym.model.Role;
 import ru.geekbrains.gym.model.Token;
 import ru.geekbrains.gym.model.User;
 import ru.geekbrains.gym.repository.UserRepository;
+import ru.geekbrains.gym.repository.UserRoleRepository;
 
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.mockito.Mockito.times;
+
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    UserRoleRepository roleRepository;
 
     @InjectMocks
     private UserService userService;
@@ -133,6 +139,76 @@ public class UserServiceTest {
 
         incorrectPaidPeriod.setDateFrom("12-12-1995 00:00:00");
         Assertions.assertThrows(AppException.class, () -> userService.editPaidPeriod(userWithIncorrectPaidPeriod));
+    }
+
+    @Test
+    @DisplayName("Success deleting user by id")
+    public void deleteByIdTest(){
+        Long idToCheck = 2L;
+        userService.deleteById(idToCheck);
+
+        Mockito.verify(userRepository, times(1)).deleteById(idToCheck);
+    }
+
+    @Test
+    @DisplayName("Success adding role manager to user")
+    public void addRoleManagerTest(){
+
+        Long id = 3L;
+        User notManager = UserMock.getUserMock(id, paidPeriod, role, token);
+
+        Role mockManager = Role.builder().roleName(RoleName.MANAGER).build();
+        Mockito.when(roleRepository.findByRoleName(Mockito.any(RoleName.class))).thenReturn(Optional.ofNullable(mockManager));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(notManager));
+
+        userService.addRoleManager(id);
+        Mockito.verify(userRepository).save(userArgumentCaptor.capture());
+
+        Set<Role> roleSet = userArgumentCaptor.getValue().getRoles();
+        Assertions.assertTrue(roleSet.contains(mockManager));
+
+        assert mockManager != null;
+        Mockito.verify(roleRepository, times(1)).findByRoleName(mockManager.getRoleName());
+    }
+
+    @Test
+    @DisplayName("Success adding role coach to user")
+    public void addRoleCoachTest(){
+
+        Long id = 4L;
+        User userNotCoach = UserMock.getUserMock(id, paidPeriod, role, token);
+
+        Role mockCoachRole = Role.builder().roleName(RoleName.COACH).build();
+        Mockito.when(roleRepository.findByRoleName(Mockito.any(RoleName.class))).thenReturn(Optional.ofNullable(mockCoachRole));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(userNotCoach));
+
+        userService.addRoleCoach(id);
+        Mockito.verify(userRepository).save(userArgumentCaptor.capture());
+
+        Set<Role> roleSet = userArgumentCaptor.getValue().getRoles();
+        Assertions.assertTrue(roleSet.contains(mockCoachRole));
+
+        assert mockCoachRole != null;
+        Mockito.verify(roleRepository, times(1)).findByRoleName(mockCoachRole.getRoleName());
+    }
+
+    @Test
+    @DisplayName("Success removing role coach from user")
+    public void removeRoleCoachTest(){
+        Role roleUser = new Role(1L, RoleName.USER);
+        Role roleCoach = new Role(2L, RoleName.COACH);
+        Set<Role> initialRoleSet = new HashSet<>(Set.of(roleUser, roleCoach));
+
+        User user = UserMock.getUserMock(6L, paidPeriod, role, token);
+        user.setRoles(initialRoleSet);
+
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
+        userService.removeRoleCoach(user.getId());
+
+        Mockito.verify(userRepository).save(userArgumentCaptor.capture());
+        Set<Role> modifiedSet = userArgumentCaptor.getValue().getRoles();
+
+        Assertions.assertFalse(modifiedSet.contains(roleCoach));
     }
 
 }
