@@ -15,7 +15,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -35,7 +34,6 @@ public class GymAccess {
 			BCryptPasswordEncoder encoder
 	) {
 		return args -> {
-			//todo insert admin with liquibase
 			if(userRepository.existsById(1L)){
 				return;
 			}

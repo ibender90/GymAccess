@@ -153,7 +153,7 @@ public class UserService {
             throw new AppException("USER WITH ID "+ userId + " is not a coach", 400);
         }
         Role coach = roles.stream().filter(role ->
-                role.getRoleName().name().equals(RoleName.COACH.name())).findFirst().get();
+                role.getRoleName().name().equals(RoleName.COACH.name())).findFirst().orElse(null);
         roles.remove(coach);
         return userMapper.toDto(userRepository.save(user));
     }
