@@ -8,17 +8,21 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.geekbrains.gym.dto.PaginatedResponseDto;
-import ru.geekbrains.gym.dto.UserSearchDto;
-import ru.geekbrains.gym.dto.UserWithPaidPeriodDto;
+import ru.geekbrains.gym.dto.*;
+import ru.geekbrains.gym.service.CoachProfileService;
+import ru.geekbrains.gym.service.CoachService;
 import ru.geekbrains.gym.service.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/manager")
 @Tag(name = "Manager")
+@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class ManagerController {
     private final UserService userService;
+    private final CoachService coachService;
+    private final CoachProfileService coachProfileService;
 
     @Operation(
             description = "Get endpoint for manager with parameter object",
@@ -35,6 +39,7 @@ public class ManagerController {
     @GetMapping(value = "/search", produces = {"application/json"})
     public ResponseEntity<PaginatedResponseDto<UserWithPaidPeriodDto>> getUsersWithPaidPeriod(
             @ParameterObject UserSearchDto searchDto) {
+
         PaginatedResponseDto<UserWithPaidPeriodDto> paginatedResponse = userService.searchForUserAndPaidPeriod(searchDto);
         return ResponseEntity
                 .ok()
@@ -60,7 +65,8 @@ public class ManagerController {
             })
     @PutMapping(value = "/update_payment", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> updatePayment(
-            @ParameterObject UserWithPaidPeriodDto userWithPaidPeriodDto){
+            @ParameterObject @RequestBody UserWithPaidPeriodDto userWithPaidPeriodDto) {
+
         UserWithPaidPeriodDto updatedUser = userService.editPaidPeriod(userWithPaidPeriodDto);
         return ResponseEntity
                 .ok()
@@ -71,13 +77,13 @@ public class ManagerController {
             description = "Get endpoint for manager with path variable",
             summary = "View user by id to check his personal data and paid period",
             responses = {
-        @ApiResponse(
-                description = "Success",
-                responseCode = "200"
-        ),
-        @ApiResponse(
-                description = "Unauthorized / Invalid Token",
-                responseCode = "403")
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403")
             })
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<UserWithPaidPeriodDto> getUserById(@PathVariable(value = "id") final Long id) {
@@ -87,4 +93,64 @@ public class ManagerController {
                 .ok()
                 .body(userFound);
     }
+
+    @Operation(
+            description = "Get endpoint for manager to assign a coach",
+            summary = "Selected user with get a role coach",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403"),
+                    @ApiResponse(
+                            description = "User with this id is already a coach",
+                            responseCode = "400"
+                    )
+            })
+    @GetMapping(value = "/assign_coach/{id}", produces = {"application/json"})
+    public ResponseEntity<UserFullDto> assignCoach(@PathVariable(value = "id") final Long id) {
+        UserFullDto userWithRoleCoach = userService.addRoleCoach(id);
+        coachService.createCoach(id);
+        return ResponseEntity
+                .ok()
+                .body(userWithRoleCoach);
+    }
+
+    @Operation(
+            description = "Get endpoint for manager to remove coach role from user",
+            summary = "Selected user with get a role coach",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403"),
+                    @ApiResponse(
+                            description = "User with this id is not a coach",
+                            responseCode = "400"
+                    )
+            })
+    @GetMapping(value = "/remove_role_coach/{id}", produces = {"application/json"})
+    public ResponseEntity<UserFullDto> removeRoleCoach(@PathVariable(value = "id") final Long id) {
+        UserFullDto notCoach = userService.removeRoleCoach(id);
+        return ResponseEntity
+                .ok()
+                .body(notCoach);
+    }
+
+    @PutMapping(value = "/edit_coach_profile", produces = {"application/json"})
+    public ResponseEntity<CoachProfileDto>editCoachProfile(@RequestBody @ParameterObject CoachProfileDto profileDto){
+
+        CoachProfileDto updatedProfile = coachProfileService.editProfile(profileDto);
+        return ResponseEntity
+                .ok()
+                .body(updatedProfile);
+    }
+
+
 }

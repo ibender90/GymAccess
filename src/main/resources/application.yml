@@ -10,7 +10,7 @@ spring:
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 
   jpa:
@@ -38,3 +38,7 @@ application:
 
 server:
   port: ${SERVER_PORT}
+
+logging:
+  level:
+    ru.geekbrains.gym: debug

@@ -1,7 +1,9 @@
 package ru.geekbrains.gym.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +25,24 @@ public class GlobalExceptionHandler {
         return wrapIntoResponseEntity(
                 new AppException(ex.getMessage() , HttpStatus.BAD_REQUEST.value()),
                 HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseBody
+    public ResponseEntity<ExceptionDto> handleExpiredTokenException(ExpiredJwtException ex){
+
+        return wrapIntoResponseEntity(
+                new AppException("Authorization is expired", HttpStatus.FORBIDDEN.value()),
+                HttpStatus.FORBIDDEN
+        );
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseBody
+    public ResponseEntity<ExceptionDto> handleBadCredentialsException(BadCredentialsException ex){
+
+        return wrapIntoResponseEntity(
+                new AppException("Provided email or password are incorrect", HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
 

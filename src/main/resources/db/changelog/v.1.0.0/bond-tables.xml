@@ -12,21 +12,45 @@
      </addColumn>
     </changeSet>
 
-    <changeSet id="add-column-workouts_to_coach" author="Stalev">
+        <changeSet id="add-column-coach_to_coach_profile" author="Stalev">
+            <addColumn tableName="coach_profile">
+                <column name="coach_id" type="BIGINT">
+                    <constraints foreignKeyName="coach_id" references="coach(id)" deleteCascade="true"/>
+                </column>
+            </addColumn>
+        </changeSet>
+
+    <changeSet id="add-column-user_id-to-coach" author="">
         <addColumn tableName="coach">
-            <column name="workouts" type="BIGINT">
-                <constraints foreignKeyName="workout_id" references="workout(id)" deleteCascade="true"/>
+            <column name="gym_user_id" type="BIGINT">
+                <constraints foreignKeyName="gym_user_id" references="gym_user(id)" deleteCascade="true"/>
             </column>
         </addColumn>
     </changeSet>
 
-    <changeSet id="add-column-coach_profile_to_coach" author="Stalev">
-        <addColumn tableName="coach">
-            <column name="coach_profile_id" type="BIGINT">
-                <constraints foreignKeyName="coach_profile_id" references="coach_profile(id)" deleteCascade="true"/>
+<!--    <changeSet id="add-column-workouts-to-coach" author="Stalev">-->
+<!--        <addColumn tableName="coach">-->
+<!--            <column name="workout_id" type="BIGINT">-->
+<!--                <constraints foreignKeyName="workout_id" references="workout(id)" deleteCascade="true"/>-->
+<!--            </column>-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
+
+    <changeSet id="add-column-coach_id to workout" author="Stalev">
+        <addColumn tableName="workout">
+            <column name="coach_id" type="BIGINT">
+                <constraints foreignKeyName="coach_id" references="coach(id)" deleteCascade="true"/>
             </column>
         </addColumn>
     </changeSet>
+
+<!--    <changeSet id="add-column-coach_profile_to_coach" author="Stalev">-->
+<!--        <addColumn tableName="coach">-->
+<!--            <column name="coach_profile_id" type="BIGINT">-->
+<!--                <constraints foreignKeyName="coach_profile_id" references="coach_profile(id)" deleteCascade="true"/>-->
+<!--            </column>-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
 
     <changeSet id="add-column-paid_period_to_gym_user" author="Stalev">
         <addColumn tableName="gym_user">

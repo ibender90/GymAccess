@@ -13,7 +13,9 @@ import ru.geekbrains.gym.dto.UserSearchDto;
 import ru.geekbrains.gym.service.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/admin")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminController {
     private final UserService userService;
@@ -33,7 +35,7 @@ public class AdminController {
     @GetMapping(value = "/set_manager/{id}", produces = {"application/json"})
     public ResponseEntity<UserFullDto> setRoleManager(@PathVariable(value = "id") final Long id) {
 
-        UserFullDto managerAssigned = userService.setRoleManager(id);
+        UserFullDto managerAssigned = userService.addRoleManager(id);
         return ResponseEntity
                 .ok()
                 .body(managerAssigned);
@@ -95,7 +97,7 @@ public class AdminController {
             })
     @PutMapping(value = "/update", produces = {"application/json"})
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<UserFullDto> updateUser(@ParameterObject UserFullDto userToUpdate){
+    public ResponseEntity<UserFullDto> updateUser(@ParameterObject @RequestBody UserFullDto userToUpdate){
         UserFullDto updatedUser = userService.partialUpdate(userToUpdate);
         return ResponseEntity
                 .ok()

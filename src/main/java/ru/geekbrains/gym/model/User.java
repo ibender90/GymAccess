@@ -1,5 +1,6 @@
 package ru.geekbrains.gym.model;
 
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import ru.geekbrains.gym.model.Role;
 import ru.geekbrains.gym.model.Token;
@@ -10,10 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@ToString
 @Table(name = "gym_user")
 public class User implements UserDetails {
 
